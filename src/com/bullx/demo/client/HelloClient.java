@@ -6,7 +6,8 @@ import javax.jws.WebService;
 
 @WebService(name = "Hello", targetNamespace = "http://server.demo.bullx.com/")
 public interface HelloClient {
-    @WebMethod
+    @WebMethod 
+    
     //    @WebResult(partName = "return")
     String sayHello(@WebParam(name = "arg0", partName = "arg0") String arg0);
 
