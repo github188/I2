@@ -15,9 +15,8 @@ public class HelloServlet extends GenericServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        System.out.println("×¼±¸Æô¶¯WebService-->http://192.168.1.103:8088/Hello");
+        System.out.println("WebService start...");
         Endpoint.publish("http://localhost:8088/Hello", new Hello());
-        System.out.println("³É¹¦Æô¶¯WebService-->http://192.168.1.103:8088/Hello");
     }
 
     @Override
@@ -29,7 +28,7 @@ public class HelloServlet extends GenericServlet {
     //            IOException {
     //        response.setCharacterEncoding("GBK");
     //        Writer wr = response.getWriter();
-    //        wr.write("<a href='http://192.168.1.103:8088/WS_Java6/HelloService?WSDL'>µã»÷·ÃÎÊWSDL</a>");
+    //        wr.write("<a href='http://192.168.1.103:8088/WS_Java6/HelloService?WSDL'>ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½WSDL</a>");
     //        wr.close();
     //    }
 
