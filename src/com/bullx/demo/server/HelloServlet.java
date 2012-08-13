@@ -9,6 +9,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.xml.ws.Endpoint;
 
+@Deprecated
+//TODO 还未实现
 public class HelloServlet extends GenericServlet {
     private static final long serialVersionUID = 1L;
 

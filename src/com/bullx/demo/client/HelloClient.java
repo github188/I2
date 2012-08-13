@@ -9,5 +9,6 @@ public interface HelloClient {
 
     String sayHelloToOne(@WebParam(name = "arg0", partName = "arg0") String arg0);
 
+    // 直接函数声明就ok了
     String sayHelloToTwo(String arg0, String arg1);
 }

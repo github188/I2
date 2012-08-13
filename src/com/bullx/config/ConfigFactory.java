@@ -25,9 +25,10 @@ public class ConfigFactory {
     private static class configHolder {
         // TODO 从配置文件里面读取
         static Configuration instance = new DevConfiguration();
+//        static Configuration instance = new ProdConfiguration();
     }
 
-    public static Configuration getInstance() {
+    public static Configuration getConfig() {
         return configHolder.instance;
     }
 }

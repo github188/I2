@@ -1,4 +1,8 @@
 .*
 *.class
 build/*
-/build
+build
+
+*.log
+!.classpath
+!.project
