@@ -3,7 +3,7 @@ package com.bullx.config;
 import java.util.logging.Level;
 
 public class DevConfiguration implements Configuration {
-    private final String WebServiceUrl = "http://localhost:81/";
+    private final String WebServiceUrl = "http://127.0.0.1:9999/";
     private final Level    logLevel      = Level.INFO;
     private final String logFileName   = System.getProperty("user.dir") + "/dev.log";
     
