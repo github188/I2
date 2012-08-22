@@ -7,8 +7,6 @@ import javax.xml.ws.Service;
 
 import com.bullx.config.ConfigFactory;
 import com.bullx.config.Configuration;
-import com.bullx.database.ConfigCac;
-import com.bullx.database.ConfigCacDAO;
 
 public class TestClient {
 
@@ -27,9 +25,5 @@ public class TestClient {
         System.out.println(h.sayHello("liubida"));
         System.out.println(h.sayHelloToOne("tom"));
         System.out.println(h.sayHelloToTwo("tom", "merry"));
-        
-//        ConfigCacDAO cacDAO = new ConfigCacDAO();
-//        ConfigCac cacInstance = (ConfigCac) cacDAO.getSession().get(ConfigCac.class, "000");
-//        System.out.println(h.sayHelloToOne(cacInstance.toString()));
     }
 }
