@@ -164,4 +164,22 @@ public class ConfigLnZsarDAO extends BaseHibernateDAO {
 			throw re;
 		}
 	}
+	
+	/*
+	 * 
+	 * This class returns the latest instance in the database
+	 */
+	public ConfigLnZsar getLatestInstance(){
+		try {
+			String queryString = "from ConfigLnZsar";
+			Query queryObject = getSession().createQuery(queryString);
+			List<ConfigLnZsar> list = queryObject.list();
+			if (list.size() < 1) throw new RuntimeException("No ConfigLnZsar found!");
+			if (list.size() > 1) log.warn("ConfigLnZsar has multiply numbers!");
+			return list.get(list.size() - 1);
+		} catch (RuntimeException er) {
+			log.error("No instance of ConfigLnZsar found", er);
+			throw er;
+		}
+	}
 }

@@ -164,4 +164,22 @@ public class ConfigLnSimlDAO extends BaseHibernateDAO {
 			throw re;
 		}
 	}
+	
+	/*
+	 * 
+	 * This class returns the latest instance in the database
+	 */
+	public ConfigLnSiml getLatestInstance(){
+		try {
+			String queryString = "from ConfigLnSiml";
+			Query queryObject = getSession().createQuery(queryString);
+			List<ConfigLnSiml> list = queryObject.list();
+			if (list.size() < 1) throw new RuntimeException("No ConfigLnSiml found!");
+			if (list.size() > 1) log.warn("ConfigLnSenv has multiply numbers!");
+			return list.get(list.size() - 1);
+		} catch (RuntimeException er) {
+			log.error("No instance of ConfigLnSiml found", er);
+			throw er;
+		}
+	}
 }

@@ -149,4 +149,23 @@ public class DataSenvDAO extends BaseHibernateDAO {
 			throw re;
 		}
 	}
+	
+	/*
+	 * 
+	 * This class returns the latest instance in the database
+	 */
+	public DataSenv getLatestInstance(int inst){
+		try {
+			String queryString = "from DataSenv as inst where inst.lnInst=? order by inst.dataTime desc";
+			Query qb = getSession().createQuery(queryString);
+			qb.setFirstResult(0);
+			qb.setMaxResults(1);
+			List<DataSenv> list = qb.list();
+			if (list.size() < 1) throw new RuntimeException("No DataSenv found!");
+			return list.get(list.size() - 1);
+		} catch (RuntimeException er) {
+			log.error("No instance of DataSenv found", er);
+			throw er;
+		}
+	}
 }

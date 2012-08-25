@@ -179,4 +179,23 @@ public class DataSpdcDAO extends BaseHibernateDAO {
 			throw re;
 		}
 	}
+	
+	/*
+	 * 
+	 * This class returns the latest instance in the database
+	 */
+	public DataSpdc getLatestInstance(int inst){
+		try {
+			String queryString = "from DataSpdc as inst where inst.lnInst=? order by inst.dataTime desc";
+			Query qb = getSession().createQuery(queryString);
+			qb.setFirstResult(0);
+			qb.setMaxResults(1);
+			List<DataSpdc> list = qb.list();
+			if (list.size() < 1) throw new RuntimeException("No DataSpdc found!");
+			return list.get(list.size() - 1);
+		} catch (RuntimeException er) {
+			log.error("No instance of DataSpdc found", er);
+			throw er;
+		}
+	}
 }

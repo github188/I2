@@ -159,4 +159,22 @@ public class ConfigLnSpdcDAO extends BaseHibernateDAO {
 			throw re;
 		}
 	}
+	
+	/*
+	 * 
+	 * This class returns the latest instance in the database
+	 */
+	public ConfigLnSpdc getLatestInstance(){
+		try {
+			String queryString = "from ConfigLnSpdc";
+			Query queryObject = getSession().createQuery(queryString);
+			List<ConfigLnSpdc> list = queryObject.list();
+			if (list.size() < 1) throw new RuntimeException("No ConfigLnSpdc found!");
+			if (list.size() > 1) log.warn("ConfigLnSpdc has multiply numbers!");
+			return list.get(list.size() - 1);
+		} catch (RuntimeException er) {
+			log.error("No instance of ConfigLnSpdc found", er);
+			throw er;
+		}
+	}
 }

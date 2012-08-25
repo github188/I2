@@ -154,4 +154,22 @@ public class ConfigLnSenvDAO extends BaseHibernateDAO {
 			throw re;
 		}
 	}
+	
+	/*
+	 * 
+	 * This class returns the latest instance in the database
+	 */
+	public ConfigLnSenv getLatestInstance(){
+		try {
+			String queryString = "from ConfigLnSenv";
+			Query queryObject = getSession().createQuery(queryString);
+			List<ConfigLnSenv> list = queryObject.list();
+			if (list.size() < 1) throw new RuntimeException("No ConfigLnSenv found!");
+			if (list.size() > 1) log.warn("ConfigLnSenv has multiply numbers!");
+			return list.get(list.size() - 1);
+		} catch (RuntimeException er) {
+			log.error("No instance of ConfigCac found", er);
+			throw er;
+		}
+	}
 }

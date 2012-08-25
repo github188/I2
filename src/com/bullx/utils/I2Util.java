@@ -46,4 +46,9 @@ public class I2Util {
         }
         return dateFormatterTime.format(date);
     }
+    
+    //FIXME: there are only two bits after point
+    public static String getStringDouble(Double dbs){
+    	return Double.toString(dbs);
+    }
 }
