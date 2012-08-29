@@ -20,8 +20,8 @@ package com.bullx.client;
  * 
  * @author Administrator
  */
-public interface ICACClient {
-    
+public interface ICACClientBak {
+
     String uploadCACHeartbeatInfo(String strXMLParams);
 
     String uploadCACData(String strXMLParams);

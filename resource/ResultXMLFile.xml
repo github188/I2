@@ -1,0 +1,18 @@
+<response>
+	<result code="1">
+		<error errorcode="020001">
+			<attr name="CAC_ID" value="11111111111111111"></attr>
+			<attr name="Sensor_ID" value="22222222222222222"></attr>
+		</error>
+	</result>
+	<commands>
+		<command objid="26M00090990000987" type="SETCONFIG">
+			<action name="CAGIP" value="10.144.98.101" />
+			<action name="CURTIME" value="2011-04-1022:10:11" />
+		</command>
+		<command objid="26M00090990000986" type="SETCONFIG">
+			<action name="MAINTIME" value="20" />
+			<action name="SAMPLECOUNT" value="15" />
+		</command>
+	</commands>
+</response>

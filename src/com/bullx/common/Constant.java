@@ -1,7 +1,7 @@
 /**
  * Project: I2
  * 
- * File Created at 2012-8-11
+ * File Created at 2012-8-28
  * $Id$
  * 
  * Copyright 1999-2100 Bullx.com Corporation Limited.
@@ -13,11 +13,11 @@
  * accordance with the terms of the license agreement you entered into
  * with Bullx.com.
  */
-package com.bullx.constants;
+package com.bullx.common;
 
 /**
- * constant of the service
  * @author Administrator
  */
-public class constant {
+public class Constant {
+    public static final String ROOT = System.getProperty("user.dir");
 }

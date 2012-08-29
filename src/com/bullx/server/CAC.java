@@ -22,6 +22,7 @@ package com.bullx.server;
  */
 public class CAC {
     public String uploadCACHeartbeatInfo(String strXMLParams) {
+        
         return null;
     }
 

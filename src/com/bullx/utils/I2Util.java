@@ -15,8 +15,17 @@
  */
 package com.bullx.utils;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.dom4j.Document;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.XMLWriter;
+
 
 /**
  * tools of I2
@@ -42,13 +51,63 @@ public class I2Util {
 
     public static String getStringTime(Date date) {
         if (null == date) {
-            return "";            
+            return "";
         }
         return dateFormatterTime.format(date);
     }
-    
+
+    public static String prettyXML(Document document) {
+        OutputFormat format = OutputFormat.createPrettyPrint();
+        format.setEncoding("UTF-8");
+        StringWriter out = new StringWriter();
+        XMLWriter xmlWriter = new XMLWriter(out, format);
+        try {
+            xmlWriter.write(document);
+            xmlWriter.flush();
+            return out.toString();
+        } catch (Exception e) {
+            Log.error(e.getMessage());
+        } finally {
+            try {
+                if (null != xmlWriter) {
+                    xmlWriter.close();
+                }
+                if (null != out) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                Log.error(e.getMessage());
+            }
+        }
+        return null;
+    }
+
     //FIXME: there are only two bits after point
-    public static String getStringDouble(Double dbs){
-    	return Double.toString(dbs);
+    public static String getStringDouble(Double dbs) {
+        return Double.toString(dbs);
+    }
+
+    public static String readFromFile(String fileName) {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(fileName));
+            String line = null;
+            StringBuilder sb = new StringBuilder();
+            while (null != (line = reader.readLine())) {
+                sb.append(line);
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            Log.error(e.getMessage());
+        } finally {
+            try {
+                if (null != reader) {
+                    reader.close();
+                }
+            } catch (Exception e) {
+                Log.error(e.getMessage());
+            }
+        }
+        return null;
     }
 }

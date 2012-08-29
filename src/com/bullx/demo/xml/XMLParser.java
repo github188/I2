@@ -26,7 +26,7 @@ import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 
-import com.bullx.constants.Log;
+import com.bullx.utils.Log;
 
 /**
  * XMLParser Demo
@@ -64,7 +64,7 @@ public class XMLParser {
             System.out.println(s);
             Log.info("xml done!");
         } catch (Exception e) {
-            Log.warn("xml error!");
+            Log.error("xml error!");
         } finally {
             try {
                 if (null != xmlWriter) {

@@ -1,4 +1,4 @@
-package com.bullx.constants;
+package com.bullx.utils;
 
 import java.io.IOException;
 import java.util.Date;
@@ -9,7 +9,6 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import com.bullx.config.ConfigFactory;
-import com.bullx.utils.I2Util;
 
 /**
  * 系统的日志处理类，根据系统配置的日志级别打印日志
@@ -50,7 +49,7 @@ public class Log {
         logger.info(msg);
     }
 
-    public static void warn(String msg) {
+    public static void error(String msg) {
         logger.warning(msg);
     }
 }

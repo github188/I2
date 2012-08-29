@@ -4,14 +4,10 @@ import java.io.File;
 import java.util.logging.Level;
 
 public class ProdConfiguration implements Configuration {
-    private final String WebServiceUrl = "";
-    private final Level  logLevel      = Level.WARNING;
-    private final String logFileName   = System.getProperty("user.dir") + "/prod.log";
-
-    @Override
-    public String getWebServiceUrl() {
-        return this.WebServiceUrl;
-    }
+    private final String CACUrl      = "http://127.0.0.1:9999/";
+    private final String CAGUrl      = "";
+    private final Level  logLevel    = Level.WARNING;
+    private final String logFileName = System.getProperty("user.dir") + "/prod.log";
 
     @Override
     public Level getLogLevel() {
@@ -21,6 +17,16 @@ public class ProdConfiguration implements Configuration {
     @Override
     public String getLogFileName() {
         return this.logFileName;
+    }
+
+    @Override
+    public String getCAGUrl() {
+        return this.CAGUrl;
+    }
+
+    @Override
+    public String getCACUrl() {
+        return this.CACUrl;
     }
 
     public static void main(String[] args) {

@@ -13,7 +13,7 @@ public class TestClient {
     static Configuration config = ConfigFactory.getConfig();
 
     public static void main(String[] args) throws Exception {
-        String u = config.getWebServiceUrl() + "hello?wsdl";
+        String u = config.getCACUrl() + "hello?wsdl";
         URL url = new URL(u);
 
         QName qname = new QName("http://server.demo.bullx.com/", "HelloService");
