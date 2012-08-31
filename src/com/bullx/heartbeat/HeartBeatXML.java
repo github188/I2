@@ -1,9 +1,7 @@
-package com.bullx.core;
+package com.bullx.heartbeat;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -11,7 +9,6 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.dom.DOMElement;
 
-import com.bullx.common.I2Error;
 import com.bullx.database.ConfigCac;
 import com.bullx.database.ConfigCacDAO;
 import com.bullx.database.ConfigIed;
@@ -23,96 +20,15 @@ import com.bullx.utils.Log;
 /**
  * @author Administrator
  */
-
-@SuppressWarnings("unchecked")
-class Result {
-    private int                 code;     // success:0
-    private I2Error             errorcode;
-    private Map<String, String> attr;
-
-    public Result() {
-    }
-
-    public Result(Element e) {
-        if (null == e) {
-            return;
-        }
-        this.code = Integer.valueOf(e.attributeValue("code"));
-        if (0 != this.code) {
-            Element errorXml = e.element("error");
-            if (null != errorXml) {
-                this.errorcode = I2Error.codeOf(errorXml.attributeValue("errorcode"));
-                List<Element> attrList = e.elements();
-                for (Element a : attrList) {
-                    this.attr.put(a.attributeValue("name"), a.attributeValue("value"));
-                }
-            }
-        }
-    }
-
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("code: " + code);
-        if (0 != code && null != errorcode) {
-            sb.append("\nerrorcode: " + errorcode.getCode());
-            if (null != attr) {
-                for (Entry<String, String> a : attr.entrySet()) {
-                    sb.append("\nattr: ");
-                    sb.append(a.getKey() + " - " + a.getValue());
-                }
-            }
-        }
-        return sb.toString();
-    }
-
-    /**
-     * @return the code
-     */
-    public int getCode() {
-        return code;
-    }
-
-    /**
-     * @param code the code to set
-     */
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    /**
-     * @return the errorcode
-     */
-    public I2Error getErrorcode() {
-        return errorcode;
-    }
-
-    /**
-     * @param errorcode the errorcode to set
-     */
-    public void setErrorcode(I2Error errorcode) {
-        this.errorcode = errorcode;
-    }
-
-    /**
-     * @return the attr
-     */
-    public Map<String, String> getAttr() {
-        return attr;
-    }
-
-    /**
-     * @param attr the attr to set
-     */
-    public void setAttr(Map<String, String> attr) {
-        this.attr = attr;
-    }
-
-}
-
 public class HeartBeatXML {
+    public String         response;
+    private Result        result;
+    private List<Command> commands;
 
-    public String response = null;
-
+    /**
+     * 构造心跳包的request
+     * @return
+     */
     public Document getRequest() {
         Document doc = DocumentHelper.createDocument();
         Element request = doc.addElement("request");
@@ -126,15 +42,28 @@ public class HeartBeatXML {
         return doc;
     }
 
+    /**
+     * 解析心跳包的response
+     */
     public void handleResponse() {
-        response = I2Util.readFromFile(I2Test.ResultXMLFile);
+        response = I2Util.readFromFile(I2Test.HeartBeatResponse);
         System.out.println(response);
         Document doc;
         try {
             doc = DocumentHelper.parseText(response);
+
+            // 解析出result
             Element resultXml = (Element) doc.selectNodes("response/result").get(0);
-            Result result = new Result(resultXml);
+            result = new Result(resultXml);
+
+            // 解析出commands
+            Element commandsXml = (Element) doc.selectNodes("response/commands").get(0);
+            commands = Command.parse(commandsXml);
+
             System.out.println(result);
+            for (Command command : commands) {
+                System.out.println(command);
+            }
         } catch (DocumentException e) {
             Log.error(e.getMessage());
         }

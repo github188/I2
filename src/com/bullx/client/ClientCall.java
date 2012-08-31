@@ -7,7 +7,7 @@ import javax.xml.ws.Service;
 
 import com.bullx.config.ConfigFactory;
 import com.bullx.config.Configuration;
-import com.bullx.core.HeartBeatXML;
+import com.bullx.heartbeat.HeartBeatXML;
 
 public class ClientCall {
 

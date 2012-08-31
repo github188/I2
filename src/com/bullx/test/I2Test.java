@@ -3,12 +3,12 @@ package com.bullx.test;
 import org.dom4j.Document;
 
 import com.bullx.common.Constant;
-import com.bullx.core.HeartBeatXML;
+import com.bullx.heartbeat.HeartBeatXML;
 import com.bullx.utils.I2Util;
 
 public class I2Test {
 
-    public static final String ResultXMLFile = Constant.ROOT + "/resource/ResultXMLFile.xml";
+    public static final String HeartBeatResponse = Constant.ROOT + "/resource/HeartBeatResponse.xml";
 
     private static void HeartBeatTest() {
         HeartBeatXML hearBeat = new HeartBeatXML();

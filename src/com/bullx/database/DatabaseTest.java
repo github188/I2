@@ -6,7 +6,7 @@ import org.dom4j.Document;
 import org.hibernate.Query;
 
 import com.bullx.core.DataXML;
-import com.bullx.core.HeartBeatXML;
+import com.bullx.heartbeat.HeartBeatXML;
 
 @SuppressWarnings("unchecked")
 public class DatabaseTest {
