@@ -6,7 +6,7 @@ import org.dom4j.Document;
 import org.hibernate.Query;
 
 import com.bullx.core.DataXML;
-import com.bullx.heartbeat.HeartBeatXML;
+import com.bullx.heartbeat.HeartBeat;
 
 @SuppressWarnings("unchecked")
 public class DatabaseTest {
@@ -44,7 +44,7 @@ public class DatabaseTest {
         System.out.println(dataXML.get());
         System.out.println("**************");
 
-        HeartBeatXML hearBeat = new HeartBeatXML();
+        HeartBeat hearBeat = new HeartBeat();
         Document request = hearBeat.getRequest();
         System.out.println(request.asXML());
     }

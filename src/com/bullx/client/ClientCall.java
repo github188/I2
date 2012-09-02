@@ -7,7 +7,7 @@ import javax.xml.ws.Service;
 
 import com.bullx.config.ConfigFactory;
 import com.bullx.config.Configuration;
-import com.bullx.heartbeat.HeartBeatXML;
+import com.bullx.heartbeat.HeartBeat;
 
 public class ClientCall {
 
@@ -24,7 +24,7 @@ public class ClientCall {
 
         CAGClient c = service.getPort(CAGClient.class);
 
-        HeartBeatXML heartBeatXml = new HeartBeatXML();
+        HeartBeat heartBeatXml = new HeartBeat();
         heartBeatXml.response = c.uploadCACHeartbeatInfo(heartBeatXml.getRequest().asXML());
         heartBeatXml.handleResponse();
     }

@@ -2,22 +2,31 @@ package com.bullx.test;
 
 import org.dom4j.Document;
 
+import com.bullx.cacdata.CACData;
 import com.bullx.common.Constant;
-import com.bullx.heartbeat.HeartBeatXML;
+import com.bullx.heartbeat.HeartBeat;
 import com.bullx.utils.I2Util;
 
 public class I2Test {
 
-    public static final String HeartBeatResponse = Constant.ROOT + "/resource/HeartBeatResponse.xml";
+    public static final String HeartBeatResponse = Constant.ROOT
+                                                         + "/resource/HeartBeatResponse.xml";
 
     private static void HeartBeatTest() {
-        HeartBeatXML hearBeat = new HeartBeatXML();
+        HeartBeat hearBeat = new HeartBeat();
         Document request = hearBeat.getRequest();
         System.out.println(I2Util.prettyXML(request));
     }
 
+    private static void CACDataTest() {
+        CACData cacData = new CACData();
+        Document request = cacData.getRequest();
+        System.out.println(I2Util.prettyXML(request));
+    }
+
     public static void main(String[] args) {
-        HeartBeatTest();
+        //        HeartBeatTest();
+        CACDataTest();
         //
         //        ConfigCacDAO cacDAO = new ConfigCacDAO();
         //        List<ConfigCac> list = cacDAO.findAll();

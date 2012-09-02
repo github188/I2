@@ -20,7 +20,7 @@ import com.bullx.utils.Log;
 /**
  * @author Administrator
  */
-public class HeartBeatXML {
+public class HeartBeat {
     public String         response;
     private Result        result;
     private List<Command> commands;
@@ -36,6 +36,7 @@ public class HeartBeatXML {
         DOMElement cac = getCAC();
         DOMElement sensors = getSensors();
 
+        //cac和sensors是平级的
         request.add(cac);
         request.add(sensors);
 
@@ -70,7 +71,7 @@ public class HeartBeatXML {
     }
 
     public static void main(String[] args) {
-        HeartBeatXML a = new HeartBeatXML();
+        HeartBeat a = new HeartBeat();
         a.handleResponse();
     }
 
