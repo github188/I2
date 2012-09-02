@@ -3,6 +3,7 @@
 build/*
 build
 
+src/hibernate.cfg.xml
 *.log
 !.classpath
 !.project
