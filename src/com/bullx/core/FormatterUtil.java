@@ -1,5 +1,6 @@
 package com.bullx.core;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,7 +10,6 @@ import org.dom4j.Node;
 import org.dom4j.dom.DOMElement;
 
 import com.bullx.common.DataType;
-import com.bullx.database.ConfigCac;
 import com.bullx.database.ConfigIed;
 import com.bullx.database.DataMmxn;
 import com.bullx.database.DataSenv;
@@ -19,39 +19,46 @@ import com.bullx.database.DataSpdc;
 import com.bullx.database.DataZsar;
 import com.bullx.utils.I2Util;
 
-public class FormatterUtil { 
-    //This structure will create all the data in a common way
+public class FormatterUtil {
+
     private static Node generateAttr(String name, Object value, String alarm) {
-    	Element attrNode = new DOMElement("attr");
-        attrNode.addAttribute("name", name);
-        if (value == null){
-	        attrNode.addAttribute("value", "");
+        Element attrNode = new DOMElement("attr");
+
+        String valueS = null;
+        if (value == null) {
+            valueS = "";
         } else {
-        	if (value.getClass() == Double.class) {
-	        	attrNode.addAttribute("value", value == null ? "" : I2Util.getStringDouble((Double)value));
-	        } else if (value.getClass() == Integer.class) {
-	        	attrNode.addAttribute("value", value == null ? "" : ((Integer)value).toString());
-	        } else if (value.getClass() == String.class) {
-	        	attrNode.addAttribute("value", value == null ? "" : (String)value);
-	        }
+            Class<?> valueClass = value.getClass();
+
+            if (valueClass == Double.class) {
+                valueS = I2Util.getStringDouble((Double) value);
+            } else {
+                if (valueClass == Timestamp.class) {
+                    valueS = I2Util.getStringTime((Timestamp) value);
+                } else {
+                    valueS = value.toString();
+                }
+            }
         }
+
+        attrNode.addAttribute("name", name);
+        attrNode.addAttribute("value", valueS);
         attrNode.addAttribute("alarm", alarm);
         return attrNode;
     }
-    
+
     private static DOMElement generateCommonAttrs(Date dt, ConfigIed ied, DOMElement thisRoot) {
-    	thisRoot.add(generateAttr("LinkedDevice", ied.getPrimaryId(), "FALSE"));
+        thisRoot.add(generateAttr("LinkedDevice", ied.getPrimaryId(), "FALSE"));
         thisRoot.add(generateAttr("DeviceCode", ied.getEquipmentInfo().getEqId(), "FALSE"));
         thisRoot.add(generateAttr("AcquisitionTime", dt, "FALSE"));
         return thisRoot;
     }
-    
 
     //According to figure C.5
     private static Node MmxnAttrsFormatter(DataMmxn param, ConfigIed ied) {
         DOMElement thisRoot = new DOMElement("attrs");
         thisRoot = generateCommonAttrs(param.getDataTime(), ied, thisRoot);
-        thisRoot.add(generateAttr("Phase", ied.getPhase(), "FALSE"));      
+        thisRoot.add(generateAttr("Phase", ied.getPhase(), "FALSE"));
         thisRoot.add(generateAttr("TotalCoreCurrent", param.getAmp(), getFlag(param.getAmpAlm())));
         return thisRoot;
     }
@@ -105,23 +112,25 @@ public class FormatterUtil {
         list.add(thisRoot);
         return list;
     }
-    
+
     private static String getFlag(int value) {
-    	if (value > 0) return "TRUE";
-    	else return "FALSE";
+        if (value > 0)
+            return "TRUE";
+        else
+            return "FALSE";
     }
-    
+
     //According to figure C.12
     //FIXME: 	1.I don't know which temperature here is
     //			2.No Pressure20C found
     private static Node SimgAttrsFormatter(DataSimg param, ConfigIed ied) {
-    	DOMElement thisRoot = new DOMElement("datanode");
-    	thisRoot = generateCommonAttrs(param.getDataTime(), ied, thisRoot);
-    	thisRoot.add(generateAttr("Temperature", param.getTmp(), "FALSE"));
-    	thisRoot.add(generateAttr("AbsolutePressure", param.getPres(), "FALSE"));
-    	thisRoot.add(generateAttr("Density", param.getDen(), getFlag(param.getDenAlm())));
-    	thisRoot.add(generateAttr("Pressure20C", param.getPres(), "FALSE"));
-    	return thisRoot;
+        DOMElement thisRoot = new DOMElement("datanode");
+        thisRoot = generateCommonAttrs(param.getDataTime(), ied, thisRoot);
+        thisRoot.add(generateAttr("Temperature", param.getTmp(), "FALSE"));
+        thisRoot.add(generateAttr("AbsolutePressure", param.getPres(), "FALSE"));
+        thisRoot.add(generateAttr("Density", param.getDen(), getFlag(param.getDenAlm())));
+        thisRoot.add(generateAttr("Pressure20C", param.getPres(), "FALSE"));
+        return thisRoot;
     }
 
     //According to figure C.13
@@ -148,10 +157,10 @@ public class FormatterUtil {
         timeStampNode.setText(I2Util.getStringTime(param.getDataTime()));
 
         thisRoot.add(SimgAttrsFormatter(param, ied));
-        
+
         List<Node> list = new ArrayList<Node>();
         list.add(thisRoot);
-        
+
         thisRoot = new DOMElement("datanode");
         thisRoot.setAttribute("sensorid", ied.getPrimaryId());
 
@@ -169,13 +178,11 @@ public class FormatterUtil {
         return list;
     }
 
-   
-    
     //According to figure C.3
     //FIXME:	1.CH3 is not found in database figure siml
     //			2.TotalHydrocarbon is not found in database figure siml
     private static Node SimlAttrsFormatter(DataSiml param, ConfigIed ied) {
-    	DOMElement thisRoot = new DOMElement("datanode");
+        DOMElement thisRoot = new DOMElement("datanode");
         thisRoot = generateCommonAttrs(param.getDataTime(), ied, thisRoot);
         thisRoot.add(generateAttr("Phase", ied.getPhase(), "FALSE"));
         thisRoot.add(generateAttr("H2", param.getH2ppm(), getFlag(param.getH2alm())));
@@ -190,7 +197,7 @@ public class FormatterUtil {
         //thisRoot.add(generateAttr("TotalHydrocarbon", )))
         return thisRoot;
     }
-    
+
     //According to figure C.4
     private static Node SimlAttrsFormatter2(DataSiml param, ConfigIed ied) {
         DOMElement thisRoot = new DOMElement("datanode");
@@ -218,8 +225,7 @@ public class FormatterUtil {
 
         List<Node> list = new ArrayList<Node>();
         list.add(thisRoot);
-        
-        
+
         thisRoot = new DOMElement("datanode");
         thisRoot.setAttribute("sensorid", ied.getPrimaryId());
 
@@ -266,7 +272,6 @@ public class FormatterUtil {
         list.add(thisRoot);
         return list;
     }
-   
 
     //According to figure C.8
     //FIXME: there is a Alarm member in the database figure, but I don't know where to put it.
@@ -301,8 +306,8 @@ public class FormatterUtil {
         list.add(thisRoot);
         return list;
     }
-    
-    public static Node CacConfigFormatter(){
-    	return null;
+
+    public static Node CacConfigFormatter() {
+        return null;
     }
 }

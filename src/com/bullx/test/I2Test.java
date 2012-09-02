@@ -26,7 +26,14 @@ public class I2Test {
 
     public static void main(String[] args) {
         //        HeartBeatTest();
-        CACDataTest();
+        //        CACDataTest();
+
+        Double a = 9.0;
+        Object o = a;
+        System.out.println(o.getClass() == Double.class);
+        System.out.println(o.getClass() == double.class);
+        System.out.println(o instanceof Double);
+
         //
         //        ConfigCacDAO cacDAO = new ConfigCacDAO();
         //        List<ConfigCac> list = cacDAO.findAll();
