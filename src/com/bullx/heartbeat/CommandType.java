@@ -8,6 +8,8 @@ public enum CommandType {
     GETNEWDATA(4),
     BEGIN(5),
     END(6);
+    
+    
 
     private final int code;
 

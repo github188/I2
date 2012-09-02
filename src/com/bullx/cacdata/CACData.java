@@ -15,7 +15,6 @@
  */
 package com.bullx.cacdata;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,7 +25,6 @@ import org.dom4j.Node;
 import org.dom4j.dom.DOMElement;
 import org.hibernate.Query;
 
-import com.bullx.common.DataType;
 import com.bullx.core.FormatterUtil;
 import com.bullx.database.ConfigIed;
 import com.bullx.database.ConfigIedDAO;
@@ -36,7 +34,6 @@ import com.bullx.database.DataSimg;
 import com.bullx.database.DataSiml;
 import com.bullx.database.DataSpdc;
 import com.bullx.database.DataZsar;
-import com.bullx.utils.I2Util;
 
 /**
  * @author Administrator
@@ -126,24 +123,4 @@ public class CACData {
             return null;
         }
     }
-//    
-//    public List<Node> DataFormatter(DataSiml param, ConfigIed ied) {
-//        DOMElement thisRoot = new DOMElement("datanode");
-//        thisRoot.setAttribute("sensorid", ied.getPrimaryId());
-//
-//        Element typeNode = thisRoot.addElement("nodetype");
-//        typeNode.setText(DataType.MMXN);
-//
-//        Element equipmentNode = thisRoot.addElement("equipmentid");
-//        equipmentNode.setText(ied.getEquipmentInfo().getEqId());
-//
-//        Element timeStampNode = thisRoot.addElement("timestamp");
-//        timeStampNode.setText(I2Util.getStringTime(param.getDataTime()));
-//
-//        thisRoot.add(SimlAttrsFormatter(param, ied));
-//
-//        List<Node> list = new ArrayList<Node>();
-//        list.add(thisRoot);
-//        return list;
-//    }
 }

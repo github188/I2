@@ -26,7 +26,7 @@ public interface CAGClient {
 
     String uploadCACHeartbeatInfo(String strXMLParams);
 
-    //    String uploadCACData(String strXMLParams);
+    String uploadCACData(String strXMLParams);
     //
     //    String uploadCACConfig(String strXMLParams);
     //

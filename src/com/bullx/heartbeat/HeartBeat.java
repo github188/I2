@@ -62,6 +62,7 @@ public class HeartBeat {
             commands = Command.parse(commandsXml);
 
             System.out.println(result);
+            System.out.println("---------");
             for (Command command : commands) {
                 System.out.println(command);
             }

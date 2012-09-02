@@ -2,6 +2,7 @@ package com.bullx.test;
 
 import org.dom4j.Document;
 
+import com.bullx.cacconfig.CACConfig;
 import com.bullx.cacdata.CACData;
 import com.bullx.common.Constant;
 import com.bullx.heartbeat.HeartBeat;
@@ -13,9 +14,11 @@ public class I2Test {
                                                          + "/resource/HeartBeatResponse.xml";
 
     private static void HeartBeatTest() {
-        HeartBeat hearBeat = new HeartBeat();
-        Document request = hearBeat.getRequest();
+        HeartBeat heartBeat = new HeartBeat();
+        Document request = heartBeat.getRequest();
         System.out.println(I2Util.prettyXML(request));
+
+        heartBeat.handleResponse();
     }
 
     private static void CACDataTest() {
@@ -24,16 +27,16 @@ public class I2Test {
         System.out.println(I2Util.prettyXML(request));
     }
 
+    private static void CACConfigTest() {
+        CACConfig cacConfig = new CACConfig();
+        Document request = cacConfig.getRequest();
+        System.out.println(I2Util.prettyXML(request));
+    }
+
     public static void main(String[] args) {
         //        HeartBeatTest();
         //        CACDataTest();
-
-        Double a = 9.0;
-        Object o = a;
-        System.out.println(o.getClass() == Double.class);
-        System.out.println(o.getClass() == double.class);
-        System.out.println(o instanceof Double);
-
+        CACConfigTest();
         //
         //        ConfigCacDAO cacDAO = new ConfigCacDAO();
         //        List<ConfigCac> list = cacDAO.findAll();
