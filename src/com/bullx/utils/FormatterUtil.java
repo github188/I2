@@ -85,7 +85,7 @@ public class FormatterUtil {
     //According to figure C.15
     //FIXME: Figure C.15 does not exist!!
     private static Node SenvAttrsFormatter(DataSenv param, ConfigIed ied) {
-        DOMElement thisRoot = new DOMElement("datanode");
+        DOMElement thisRoot = new DOMElement("attrs");
         thisRoot = generateCommonAttrs(param.getDataTime(), ied, thisRoot);
         thisRoot.add(generateAttr("EnvTemp", param.getEnvTmp(), "FALSE"));
         thisRoot.add(generateAttr("EnvHum", param.getEnvHum(), "FALSE"));
@@ -123,7 +123,7 @@ public class FormatterUtil {
     //FIXME: 	1.I don't know which temperature here is
     //			2.No Pressure20C found
     private static Node SimgAttrsFormatter(DataSimg param, ConfigIed ied) {
-        DOMElement thisRoot = new DOMElement("datanode");
+        DOMElement thisRoot = new DOMElement("attrs");
         thisRoot = generateCommonAttrs(param.getDataTime(), ied, thisRoot);
         thisRoot.add(generateAttr("Temperature", param.getTmp(), "FALSE"));
         thisRoot.add(generateAttr("AbsolutePressure", param.getPres(), "FALSE"));
@@ -134,7 +134,7 @@ public class FormatterUtil {
 
     //According to figure C.13
     private static Node SimgAttrsFormatter2(DataSimg param, ConfigIed ied) {
-        DOMElement thisRoot = new DOMElement("datanode");
+        DOMElement thisRoot = new DOMElement("attrs");
         thisRoot = generateCommonAttrs(param.getDataTime(), ied, thisRoot);
         thisRoot.add(generateAttr("Temperature", param.getTmp(), "FALSE"));
         thisRoot.add(generateAttr("Moisture", param.getMst(), getFlag(param.getMstAlm())));
@@ -181,7 +181,7 @@ public class FormatterUtil {
     //FIXME:	1.CH3 is not found in database figure siml
     //			2.TotalHydrocarbon is not found in database figure siml
     private static Node SimlAttrsFormatter(DataSiml param, ConfigIed ied) {
-        DOMElement thisRoot = new DOMElement("datanode");
+        DOMElement thisRoot = new DOMElement("attrs");
         thisRoot = generateCommonAttrs(param.getDataTime(), ied, thisRoot);
         thisRoot.add(generateAttr("Phase", ied.getPhase(), "FALSE"));
         thisRoot.add(generateAttr("H2", param.getH2ppm(), getFlag(param.getH2alm())));
@@ -199,7 +199,7 @@ public class FormatterUtil {
 
     //According to figure C.4
     private static Node SimlAttrsFormatter2(DataSiml param, ConfigIed ied) {
-        DOMElement thisRoot = new DOMElement("datanode");
+        DOMElement thisRoot = new DOMElement("attrs");
         thisRoot = generateCommonAttrs(param.getDataTime(), ied, thisRoot);
         thisRoot.add(generateAttr("Phase", ied.getPhase(), "FALSE"));
         thisRoot.add(generateAttr("Moisture", param.getMst(), "FALSE"));
@@ -245,7 +245,7 @@ public class FormatterUtil {
     //According to figure C.2
     //FIXME:	I can't find the corresponds of figure C.2 and database figure spdc
     private static Node SpdcAttrsFormatter(DataSpdc param, ConfigIed ied) {
-        DOMElement thisRoot = new DOMElement("datanode");
+        DOMElement thisRoot = new DOMElement("attrs");
         thisRoot = generateCommonAttrs(param.getDataTime(), ied, thisRoot);
         thisRoot.add(generateAttr("Phase", ied.getPhase(), "FALSE"));
         //thisRoot.add(generateAttr("DischargeCapacity", param.get)));
@@ -275,7 +275,7 @@ public class FormatterUtil {
     //According to figure C.8
     //FIXME: there is a Alarm member in the database figure, but I don't know where to put it.
     private static Node ZsarAttrsFormatter(DataZsar param, ConfigIed ied) {
-        DOMElement thisRoot = new DOMElement("datanode");
+        DOMElement thisRoot = new DOMElement("attrs");
         thisRoot = generateCommonAttrs(param.getDataTime(), ied, thisRoot);
         thisRoot.add(generateAttr("Phase", ied.getPhase(), "FALSE"));
         thisRoot.add(generateAttr("SystemVoltage", param.getSysVol(), "FALSE"));
