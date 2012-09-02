@@ -1,4 +1,4 @@
-package com.bullx.core;
+package com.bullx.utils;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -17,7 +17,6 @@ import com.bullx.database.DataSimg;
 import com.bullx.database.DataSiml;
 import com.bullx.database.DataSpdc;
 import com.bullx.database.DataZsar;
-import com.bullx.utils.I2Util;
 
 public class FormatterUtil {
 

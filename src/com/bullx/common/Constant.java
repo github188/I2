@@ -19,5 +19,7 @@ package com.bullx.common;
  * @author Administrator
  */
 public class Constant {
-    public static final String ROOT = System.getProperty("user.dir");
+    public static final String ROOT       = System.getProperty("user.dir");
+
+    public static final String CAG_TARGET = "http://cag.bullx.com/";
 }

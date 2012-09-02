@@ -25,7 +25,6 @@ import org.dom4j.Node;
 import org.dom4j.dom.DOMElement;
 import org.hibernate.Query;
 
-import com.bullx.core.FormatterUtil;
 import com.bullx.database.ConfigIed;
 import com.bullx.database.ConfigIedDAO;
 import com.bullx.database.DataMmxn;
@@ -34,6 +33,7 @@ import com.bullx.database.DataSimg;
 import com.bullx.database.DataSiml;
 import com.bullx.database.DataSpdc;
 import com.bullx.database.DataZsar;
+import com.bullx.utils.FormatterUtil;
 
 /**
  * @author Administrator

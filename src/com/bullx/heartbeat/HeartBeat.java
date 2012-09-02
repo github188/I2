@@ -13,7 +13,6 @@ import com.bullx.database.ConfigCac;
 import com.bullx.database.ConfigCacDAO;
 import com.bullx.database.ConfigIed;
 import com.bullx.database.ConfigIedDAO;
-import com.bullx.test.I2Test;
 import com.bullx.utils.I2Util;
 import com.bullx.utils.Log;
 
@@ -27,6 +26,7 @@ public class HeartBeat {
 
     /**
      * 构造心跳包的request
+     * 
      * @return
      */
     public Document getRequest() {
@@ -47,8 +47,6 @@ public class HeartBeat {
      * 解析心跳包的response
      */
     public void handleResponse() {
-        response = I2Util.readFromFile(I2Test.HeartBeatResponse);
-        System.out.println(response);
         Document doc;
         try {
             doc = DocumentHelper.parseText(response);

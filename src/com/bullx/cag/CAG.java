@@ -1,7 +1,7 @@
 /**
  * Project: I2
  * 
- * File Created at 2012-8-28
+ * File Created at 2012-9-2
  * $Id$
  * 
  * Copyright 1999-2100 Bullx.com Corporation Limited.
@@ -13,24 +13,31 @@
  * accordance with the terms of the license agreement you entered into
  * with Bullx.com.
  */
-package com.bullx.client;
+package com.bullx.cag;
 
 import javax.jws.WebService;
 
-import com.bullx.common.Constant;
+import com.bullx.test.I2Test;
+import com.bullx.utils.I2Util;
 
 /**
  * @author Administrator
  */
 
-@WebService(name = "CAG", targetNamespace = Constant.CAG_TARGET)
-public interface CAGClient {
+@WebService
+public class CAG {
 
-    String uploadHeartbeatInfo(String strXMLParams);
+    public String uploadHeartbeatInfo(String strXMLParams) {
+        return I2Util.readFromFile(I2Test.HeartBeatResponse);
+    }
 
-    String uploadCACData(String strXMLParams);
+    public String uploadCACData(String strXMLParams) {
+        return "ok, done!";
+    }
 
-    String uploadCACConfig(String strXMLParams);
+    public String uploadCACConfig(String strXMLParams) {
+        return null;
+    }
 
     //
     //    String downloadCACLatestVersion(String strXMLParams);

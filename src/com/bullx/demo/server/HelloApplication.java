@@ -7,7 +7,7 @@ import com.bullx.config.Configuration;
 import com.bullx.utils.Log;
 
 public class HelloApplication {
-    static Configuration config        = ConfigFactory.getConfig();
+    static Configuration config = ConfigFactory.getConfig();
     static String        CACUrl = config.getCACUrl();
 
     public static void main(String[] args) {
