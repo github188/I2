@@ -9,6 +9,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.dom.DOMElement;
 
+import com.bullx.cacdata.CACData;
 import com.bullx.database.ConfigCac;
 import com.bullx.database.ConfigCacDAO;
 import com.bullx.database.ConfigIed;
@@ -64,12 +65,18 @@ public class HeartBeat {
                 System.out.println(result);
             } else {
                 System.out.println("result is success");
-                
             }
-            System.out.println(result);
+
             System.out.println("---------");
             for (Command command : commands) {
                 System.out.println(command);
+
+                switch (command.getCommandType()) {
+                    case GETNEWDATA:
+                        new CACData().getRequest();
+                        break;
+                    default:
+                }
             }
         } catch (DocumentException e) {
             Log.error(e.getMessage());
