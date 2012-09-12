@@ -1,17 +1,21 @@
 package com.bullx.client;
 
 import java.net.URL;
+import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
+import com.bullx.cacdata.CACData;
 import com.bullx.config.ConfigFactory;
 import com.bullx.config.Configuration;
+import com.bullx.heartbeat.Command;
 import com.bullx.heartbeat.HeartBeat;
-import com.bullx.utils.Log;
 
 public class ClientCall {
 
@@ -20,6 +24,8 @@ public class ClientCall {
     public static String u = "http://10.138.19.72:7001/TRANSFCAG/services/CAGAccessService?wsdl";
     public static final String path_uri = "http://info.nari-china.com/CAG";
     public static String service_name = "CAGAccessService";
+
+    public static int TIMEOUT = 300;
 
     public static void main(String[] args) throws Exception {
         //        String u = config.getCAGUrl() + "CAG?wsdl";
@@ -38,12 +44,35 @@ public class ClientCall {
         CAGClient c = service.getPort(CAGClient.class);
 
         ExecutorService exec = Executors.newCachedThreadPool();
-        exec.execute(new HeartBeatWorker(c));
+        while (true) {
+            Future<List<Command>> hearBeatFuture = exec.submit(new HeartBeatWorker(c));
+            List<Command> commands = hearBeatFuture.get(TIMEOUT, TimeUnit.SECONDS);
+
+            if (null != commands && !commands.isEmpty()) {
+                for (Command command : commands) {
+                    switch (command.getCommandType()) {
+                        case GETNEWDATA: {
+                            Future<Boolean> cacDataFuture = exec.submit(new CACDataWorker(c));
+                            Boolean result = cacDataFuture.get(TIMEOUT, TimeUnit.SECONDS);
+                            if (result) {
+                                System.out.println("uploadCACData success");
+                            }
+                            // TODO if result error
+                            break;
+                        }
+                        default:
+                    }
+                }
+            }
+
+            TimeUnit.SECONDS.sleep(5);
+        }
+
     }
 
 }
 
-class HeartBeatWorker implements Runnable {
+class HeartBeatWorker implements Callable<List<Command>> {
 
     private final HeartBeat heartBeatXml = new HeartBeat();
     private final CAGClient c;
@@ -53,16 +82,25 @@ class HeartBeatWorker implements Runnable {
     }
 
     @Override
-    public void run() {
-        try {
-            while (!Thread.interrupted()) {
-                String request = heartBeatXml.getRequest().asXML();
-                heartBeatXml.response = c.uploadHeartbeatInfo(request);
-                heartBeatXml.handleResponse();
-                TimeUnit.SECONDS.sleep(5);
-            }
-        } catch (InterruptedException e) {
-            Log.error(e.getMessage());
-        }
+    public List<Command> call() {
+        String request = heartBeatXml.getRequest().asXML();
+        heartBeatXml.response = c.uploadHeartbeatInfo(request);
+        return heartBeatXml.handleResponse();
+    }
+}
+
+class CACDataWorker implements Callable<Boolean> {
+    private final CACData cacDataXml = new CACData();
+    private final CAGClient c;
+
+    public CACDataWorker(CAGClient c) {
+        this.c = c;
+    }
+
+    public Boolean call() {
+        String request = cacDataXml.getRequest().asXML();
+        cacDataXml.response = c.uploadCACData(request);
+        // TODO parse response to get the real result
+        return true;
     }
 }

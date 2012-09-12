@@ -9,7 +9,6 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.dom.DOMElement;
 
-import com.bullx.cacdata.CACData;
 import com.bullx.database.ConfigCac;
 import com.bullx.database.ConfigCacDAO;
 import com.bullx.database.ConfigIed;
@@ -47,7 +46,7 @@ public class HeartBeat {
     /**
      * 解析心跳包的response
      */
-    public void handleResponse() {
+    public List<Command> handleResponse() {
         Document doc;
         try {
             doc = DocumentHelper.parseText(response);
@@ -68,19 +67,11 @@ public class HeartBeat {
             }
 
             System.out.println("---------");
-            for (Command command : commands) {
-                System.out.println(command);
-
-                switch (command.getCommandType()) {
-                    case GETNEWDATA:
-                        new CACData().getRequest();
-                        break;
-                    default:
-                }
-            }
+            return commands;
         } catch (DocumentException e) {
             Log.error(e.getMessage());
         }
+        return null;
     }
 
     public static void main(String[] args) {

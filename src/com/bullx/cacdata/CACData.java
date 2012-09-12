@@ -33,12 +33,17 @@ import com.bullx.database.DataSimg;
 import com.bullx.database.DataSiml;
 import com.bullx.database.DataSpdc;
 import com.bullx.database.DataZsar;
+import com.bullx.heartbeat.Command;
+import com.bullx.heartbeat.Result;
 import com.bullx.utils.FormatterUtil;
 
 /**
  * @author Administrator
  */
 public class CACData {
+
+    public String response;
+    private Result result;
 
     public Document getRequest() {
         Document doc = DocumentHelper.createDocument();
