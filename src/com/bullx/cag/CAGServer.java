@@ -29,9 +29,11 @@ public class CAGServer {
     private static Configuration config = ConfigFactory.getConfig();
 
     protected void run() {
-        final String CAGUrl = config.getCAGUrl();
+        String CAGUrl = config.getCAGUrl();
         Log.info("CAG Server start...");
-        Endpoint.publish(CAGUrl + "CAG", new CAG());
+
+        CAGUrl = "http://127.0.0.1:9000/" + "CAGAccessService";
+        Endpoint.publish(CAGUrl, new CAGPortType());
     }
 
     public static void main(String[] args) {

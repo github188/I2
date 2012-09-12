@@ -20,8 +20,8 @@ import com.bullx.utils.Log;
  * @author Administrator
  */
 public class HeartBeat {
-    public String         response;
-    private Result        result;
+    public String response;
+    private Result result;
     private List<Command> commands;
 
     /**
@@ -59,6 +59,13 @@ public class HeartBeat {
             Element commandsXml = (Element) doc.selectNodes("response/commands").get(0);
             commands = Command.parse(commandsXml);
 
+            if (0 != result.getCode()) {
+                System.out.println("result is error");
+                System.out.println(result);
+            } else {
+                System.out.println("result is success");
+                
+            }
             System.out.println(result);
             System.out.println("---------");
             for (Command command : commands) {

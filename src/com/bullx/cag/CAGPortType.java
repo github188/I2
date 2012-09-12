@@ -25,7 +25,7 @@ import com.bullx.utils.I2Util;
  */
 
 @WebService
-public class CAG {
+public class CAGPortType {
 
     public String uploadHeartbeatInfo(String strXMLParams) {
         return I2Util.readFromFile(I2Test.HeartBeatResponse);

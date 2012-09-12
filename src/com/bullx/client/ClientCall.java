@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
-import com.bullx.common.Constant;
 import com.bullx.config.ConfigFactory;
 import com.bullx.config.Configuration;
 import com.bullx.heartbeat.HeartBeat;
@@ -18,10 +17,19 @@ public class ClientCall {
 
     public static Configuration config = ConfigFactory.getConfig();
 
+    public static String u = "http://10.138.19.72:7001/TRANSFCAG/services/CAGAccessService?wsdl";
+    public static final String path_uri = "http://info.nari-china.com/CAG";
+    public static String service_name = "CAGAccessService";
+
     public static void main(String[] args) throws Exception {
-        String u = config.getCAGUrl() + "CAG?wsdl";
-        String path_uri = Constant.CAG_TARGET;
-        String service_name = "CAGService";
+        //        String u = config.getCAGUrl() + "CAG?wsdl";
+        //        String path_uri = Constant.CAG_TARGET;
+        //        String service_name = "CAGPortTypeService";
+
+        // just for test
+        //        u = "http://127.0.0.1:9000/" + "CAGAccessService?wsdl";
+        //        path_uri = "http://cag.bullx.com/";
+        //        service_name = "CAGPortTypeService";
 
         URL url = new URL(u);
         QName qname = new QName(path_uri, service_name);
