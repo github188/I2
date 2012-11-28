@@ -15,33 +15,32 @@
  */
 package com.bullx.ui;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.GridLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
+import javax.swing.JTextArea;
+
+import com.bullx.client.ClientCall;
 
 /**
  * @author Administrator
  */
 public class Demo {
     private static String labelPrefix = "Number of button clicks: ";
+    private final String BUTTON_LABEL = "启动Service";
     private int numClicks = 0; //计数器，计算点击次数
 
     public Component createComponents() {
-        final JLabel label = new JLabel(labelPrefix + "0 ");
+        final JLabel label = new JLabel(BUTTON_LABEL + ": ");
 
-        JButton button = new JButton("I'm a Swing button!");
+        JButton button = new JButton(BUTTON_LABEL);
         button.setMnemonic(KeyEvent.VK_I); //设置按钮的热键为'I'
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -55,38 +54,50 @@ public class Demo {
         /* 在顶层容器及其内容之间放置空间的常用办法是把内容添加到Jpanel上，而Jpanel本身没有边框的。 */
 
         JPanel pane = new JPanel();
-        pane.setBorder(BorderFactory.createEmptyBorder(30, //top
-                30, //left
-                10, //bottom
-                30) //right
-        );
-        pane.setLayout(new GridLayout(0, 1)); //单列多行
+        pane.setSize(200, 300);
+        //        pane.setBounds(30, 30, 300, 30);
+        //        pane.setLayout(new GridLayout(0, 1)); //单列多行
         pane.add(button);
         pane.add(label);
         return pane;
     }
 
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-            //设置窗口风格
-        } catch (Exception e) {
-        }
+    private final int WIDTH = 800;
+    private final int HEIGHT = 494;
+    private final String START = "启动Service:";
+    private final String STOP = "停止Service:";
 
-        //创建顶层容器并添加内容.
-        JFrame frame = new JFrame("SwingApplication");
-        Demo app = new Demo();
-        Component contents = app.createComponents();
-        frame.getContentPane().add(contents, BorderLayout.CENTER);
+    public Demo() {
+        final ClientCall c = new ClientCall();
+        JFrame f = new JFrame("FlowLayout");
+        f.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-        //窗口设置结束，开始显示
-        frame.addWindowListener(new WindowAdapter() {
-            //匿名类用于注册监听器
-            public void windowClosing(WindowEvent e) {
-                System.exit(0);
+        final JButton btn = new JButton(START);
+        btn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (START.equalsIgnoreCase(btn.getText())) {
+                    c.call();
+                    btn.setText(STOP);
+                    return;
+                }
+                if (STOP.equalsIgnoreCase(btn.getText())) {
+                    c.cancel();
+                    btn.setText(START);
+                    return;
+                }
             }
         });
-        frame.pack();
-        frame.setVisible(true);
+
+        JTextArea txtArea = new JTextArea(28, 60);
+        f.add(btn);
+        f.add(txtArea);
+        f.setSize(WIDTH, HEIGHT);
+        f.setVisible(true);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    }
+
+    public static void main(String[] args) {
+        new Demo();
     }
 }

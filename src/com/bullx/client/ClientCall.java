@@ -27,49 +27,71 @@ public class ClientCall {
 
     public static int TIMEOUT = 300;
 
-    public static void main(String[] args) throws Exception {
+    private static boolean bStop = true;
+
+    //    public String call() {
+    public static void main(String[] args) {
         //        String u = config.getCAGUrl() + "CAG?wsdl";
         //        String path_uri = Constant.CAG_TARGET;
         //        String service_name = "CAGPortTypeService";
 
         // just for test
-        //        u = "http://127.0.0.1:9000/" + "CAGAccessService?wsdl";
-        //        path_uri = "http://cag.bullx.com/";
-        //        service_name = "CAGPortTypeService";
+        String u = "http://127.0.0.1:9000/" + "CAGAccessService?wsdl";
+        String path_uri = "http://cag.bullx.com/";
+        String service_name = "CAGPortTypeService";
 
-        URL url = new URL(u);
-        QName qname = new QName(path_uri, service_name);
-        Service service = Service.create(url, qname);
+        URL url = null;
+        QName qname = null;
+        Service service = null;
+        CAGClient c = null;
+        ExecutorService exec = null;
+        try {
+            bStop = false;
+            url = new URL(u);
+            qname = new QName(path_uri, service_name);
+            service = Service.create(url, qname);
+            c = service.getPort(CAGClient.class);
+            exec = Executors.newCachedThreadPool();
+            while (!Thread.interrupted() && !bStop) {
+                Future<List<Command>> hearBeatFuture = exec.submit(new HeartBeatWorker(c));
+                List<Command> commands = hearBeatFuture.get(TIMEOUT, TimeUnit.SECONDS);
 
-        CAGClient c = service.getPort(CAGClient.class);
-
-        ExecutorService exec = Executors.newCachedThreadPool();
-        while (true) {
-            Future<List<Command>> hearBeatFuture = exec.submit(new HeartBeatWorker(c));
-            List<Command> commands = hearBeatFuture.get(TIMEOUT, TimeUnit.SECONDS);
-
-            if (null != commands && !commands.isEmpty()) {
-                for (Command command : commands) {
-                    switch (command.getCommandType()) {
-                        case GETNEWDATA: {
-                            Future<Boolean> cacDataFuture = exec.submit(new CACDataWorker(c));
-                            Boolean result = cacDataFuture.get(TIMEOUT, TimeUnit.SECONDS);
-                            if (result) {
-                                System.out.println("uploadCACData success");
+                if (null != commands && !commands.isEmpty()) {
+                    for (Command command : commands) {
+                        switch (command.getCommandType()) {
+                            case GETNEWDATA: {
+                                Future<Boolean> cacDataFuture = exec.submit(new CACDataWorker(c));
+                                Boolean result = cacDataFuture.get(TIMEOUT, TimeUnit.SECONDS);
+                                if (result) {
+                                    System.out.println("uploadCACData success");
+                                }
+                                // TODO if result error
+                                break;
                             }
-                            // TODO if result error
-                            break;
+                            default:
                         }
-                        default:
                     }
                 }
+                TimeUnit.SECONDS.sleep(5);
             }
-
-            TimeUnit.SECONDS.sleep(5);
+            bStop = true;
+            //            return null;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            //            return e.getMessage();
+        } finally {
+            exec = null;
+            bStop = true;
         }
-
     }
 
+    public boolean getStatus() {
+        return !bStop;
+    }
+
+    public boolean cancel() {
+        return bStop = true;
+    }
 }
 
 class HeartBeatWorker implements Callable<List<Command>> {

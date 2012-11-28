@@ -17,12 +17,14 @@ package com.bullx.client;
 
 import javax.jws.WebService;
 
+import com.bullx.common.Constant;
+
 /**
  * @author Administrator
  */
 
-//@WebService(name = "CAGPortType", targetNamespace = Constant.CAG_TARGET)
-@WebService(name = "CAGAccessServicePortType", targetNamespace = ClientCall.path_uri)
+@WebService(name = "CAGPortType", targetNamespace = Constant.CAG_TARGET)
+//@WebService(name = "CAGAccessServicePortType", targetNamespace = ClientCall.path_uri)
 public interface CAGClient {
 
     String uploadHeartbeatInfo(String strXMLParams);
