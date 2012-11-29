@@ -2,6 +2,7 @@ package com.bullx.heartbeat;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -46,6 +47,40 @@ public class HeartBeat {
     /**
      * 解析心跳包的response
      */
+    public List<Command> handleResponse(BlockingQueue<String> buffer) {
+        Document doc;
+        try {
+            doc = DocumentHelper.parseText(response);
+
+            // 解析出result
+            Element resultXml = (Element) doc.selectNodes("response/result").get(0);
+            result = new Result(resultXml);
+
+            // 解析出commands
+            Element commandsXml = (Element) doc.selectNodes("response/commands").get(0);
+            commands = Command.parse(commandsXml);
+
+            if (0 != result.getCode()) {
+                buffer.put("result is error");
+                buffer.put(result.toString());
+                System.out.println("result is error");
+                System.out.println(result);
+            } else {
+                buffer.put("result is success");
+                System.out.println("result is success");
+            }
+
+            buffer.put("---------");
+            System.out.println();
+            return commands;
+        } catch (DocumentException e) {
+            Log.error(e.getMessage());
+        } catch (Exception e) {
+            Log.error(e.getMessage());
+        }
+        return null;
+    }
+
     public List<Command> handleResponse() {
         Document doc;
         try {
@@ -66,9 +101,11 @@ public class HeartBeat {
                 System.out.println("result is success");
             }
 
-            System.out.println("---------");
+            System.out.println();
             return commands;
         } catch (DocumentException e) {
+            Log.error(e.getMessage());
+        } catch (Exception e) {
             Log.error(e.getMessage());
         }
         return null;

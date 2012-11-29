@@ -2,10 +2,12 @@ package com.bullx.client;
 
 import java.net.URL;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import javax.xml.namespace.QName;
@@ -17,7 +19,7 @@ import com.bullx.config.Configuration;
 import com.bullx.heartbeat.Command;
 import com.bullx.heartbeat.HeartBeat;
 
-public class ClientCall {
+public class ClientCall implements Runnable {
 
     public static Configuration config = ConfigFactory.getConfig();
 
@@ -27,10 +29,21 @@ public class ClientCall {
 
     public static int TIMEOUT = 300;
 
-    private static boolean bStop = true;
+    private boolean bStop = true;
 
-    //    public String call() {
-    public static void main(String[] args) {
+    private URL url = null;
+    private QName qname = null;
+    private Service service = null;
+    private CAGClient c = null;
+    private ExecutorService exec = null;
+    private final BlockingQueue<String> buffer;
+
+    public ClientCall(BlockingQueue<String> buffer) {
+        this.buffer = buffer;
+    }
+
+    public void run() {
+        //    public static void main(String[] args) {
         //        String u = config.getCAGUrl() + "CAG?wsdl";
         //        String path_uri = Constant.CAG_TARGET;
         //        String service_name = "CAGPortTypeService";
@@ -40,11 +53,6 @@ public class ClientCall {
         String path_uri = "http://cag.bullx.com/";
         String service_name = "CAGPortTypeService";
 
-        URL url = null;
-        QName qname = null;
-        Service service = null;
-        CAGClient c = null;
-        ExecutorService exec = null;
         try {
             bStop = false;
             url = new URL(u);
@@ -52,8 +60,10 @@ public class ClientCall {
             service = Service.create(url, qname);
             c = service.getPort(CAGClient.class);
             exec = Executors.newCachedThreadPool();
+            buffer.clear();
+
             while (!Thread.interrupted() && !bStop) {
-                Future<List<Command>> hearBeatFuture = exec.submit(new HeartBeatWorker(c));
+                Future<List<Command>> hearBeatFuture = exec.submit(new HeartBeatWorker(c, buffer));
                 List<Command> commands = hearBeatFuture.get(TIMEOUT, TimeUnit.SECONDS);
 
                 if (null != commands && !commands.isEmpty()) {
@@ -75,10 +85,8 @@ public class ClientCall {
                 TimeUnit.SECONDS.sleep(5);
             }
             bStop = true;
-            //            return null;
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            //            return e.getMessage();
         } finally {
             exec = null;
             bStop = true;
@@ -98,16 +106,18 @@ class HeartBeatWorker implements Callable<List<Command>> {
 
     private final HeartBeat heartBeatXml = new HeartBeat();
     private final CAGClient c;
+    private final BlockingQueue<String> buffer;
 
-    public HeartBeatWorker(CAGClient c) {
+    public HeartBeatWorker(CAGClient c, BlockingQueue<String> buffer) {
         this.c = c;
+        this.buffer = buffer;
     }
 
     @Override
     public List<Command> call() {
         String request = heartBeatXml.getRequest().asXML();
         heartBeatXml.response = c.uploadHeartbeatInfo(request);
-        return heartBeatXml.handleResponse();
+        return heartBeatXml.handleResponse(buffer);
     }
 }
 

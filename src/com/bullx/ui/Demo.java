@@ -20,6 +20,10 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -66,9 +70,11 @@ public class Demo {
     private final int HEIGHT = 494;
     private final String START = "启动Service:";
     private final String STOP = "停止Service:";
+    private BlockingQueue<String> buffer = new LinkedBlockingQueue<String>();
 
     public Demo() {
-        final ClientCall c = new ClientCall();
+        final ClientCall c = new ClientCall(buffer);
+
         JFrame f = new JFrame("FlowLayout");
         f.setLayout(new FlowLayout(FlowLayout.LEFT));
 
@@ -76,7 +82,7 @@ public class Demo {
         btn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (START.equalsIgnoreCase(btn.getText())) {
-                    c.call();
+                    new Thread(c).start();
                     btn.setText(STOP);
                     return;
                 }
@@ -89,15 +95,45 @@ public class Demo {
         });
 
         JTextArea txtArea = new JTextArea(28, 60);
+        new Thread(new Consumer(buffer, txtArea)).start();
         f.add(btn);
         f.add(txtArea);
         f.setSize(WIDTH, HEIGHT);
         f.setVisible(true);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
     }
 
     public static void main(String[] args) {
         new Demo();
+    }
+}
+
+class Consumer implements Runnable {
+    private BlockingQueue<String> buffer = null;
+    private JTextArea txtArea = null;
+    private boolean bStop = true;
+
+    public Consumer(BlockingQueue<String> buffer, JTextArea txtArea) {
+        this.buffer = buffer;
+        this.txtArea = txtArea;
+    }
+
+    public void run() {
+        try {
+            bStop = false;
+            while (!Thread.interrupted() && !bStop) {
+                txtArea.append(buffer.take());
+            }
+        } catch (InterruptedException e) {
+            txtArea.append(e.getMessage());
+        }
+    }
+
+    public boolean getStatus() {
+        return !bStop;
+    }
+
+    public boolean cancel() {
+        return bStop = true;
     }
 }
